@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sign Up — PrimePhone Store</title>
+<link rel="favicon" href="assets/favicon.png" type="image/x-icon">
+<style>
+:root {
+    --primary-color: #FF6B6B;
+    --secondary-color: #4ECDC4;
+    --accent-color: #45B7D1;
+    --text-dark: #2C3E50;
+    --text-light: #7F8C8D;
+    --bg-light: #F8F9FA;
+    --white: #FFFFFF;
+    --shadow: 0 5px 15px rgba(0,0,0,0.1);
+    --shadow-hover: 0 10px 25px rgba(0,0,0,0.15);
+    --border-radius: 15px;
+    --transition: all 0.3s ease;
+}
+
+/* Full-page modern layout */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;color:var(--text-dark);background:linear-gradient(180deg,var(--bg-light),#eef9fb)}
+.container{min-height:100vh;display:grid;place-items:center;padding:32px}
+.card {
+  width:100%;
+  max-width:920px;
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  gap:28px;
+  background:linear-gradient(180deg,var(--white),#ffffff);
+  border-radius:calc(var(--border-radius) + 5px);
+  box-shadow:var(--shadow);
+  padding:28px;
+  transition:var(--transition);
+}
+@media(max-width:880px){ .card{grid-template-columns:1fr; padding:20px} }
+
+.brand {
+  display:flex;align-items:center;gap:12px;font-weight:700;color:var(--primary-color);font-size:20px;
+}
+.left {
+  padding:8px 6px;
+  display:flex;flex-direction:column;gap:14px;justify-content:center;
+}
+.hero {
+  background:linear-gradient(135deg,var(--secondary-color),var(--accent-color));
+  color:var(--white);
+  padding:22px;border-radius:12px;box-shadow:var(--shadow);
+}
+.hero h1{margin:0;font-size:28px;line-height:1.06}
+.hero p{margin:6px 0 0;color:rgba(255,255,255,0.92)}
+.illustration{display:flex;align-items:center;justify-content:center;height:160px;border-radius:10px;background:rgba(255,255,255,0.06);box-shadow:inset 0 -10px 30px rgba(0,0,0,0.03)}
+.illustration svg{width:120px;height:120px;opacity:0.95}
+
+.form {
+  background: linear-gradient(180deg,#ffffff,#fcfeff);
+  padding:18px;border-radius:12px;border:1px solid rgba(44,62,80,0.04);
+  display:flex;flex-direction:column;gap:12px;align-items:stretch;
+}
+.form h2{margin:0;font-size:20px;color:var(--text-dark)}
+.row{display:flex;gap:10px}
+@media(max-width:520px){ .row{flex-direction:column} }
+
+.input {
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid rgba(44,62,80,0.08);
+  background:linear-gradient(180deg,#fff,#fbfeff);
+  transition:var(--transition);
+  font-size:14px;color:var(--text-dark);
+}
+.input:focus{outline:none;box-shadow:0 6px 20px rgba(69,183,209,0.12);border-color:var(--accent-color)}
+
+.small{font-size:13px;color:var(--text-light)}
+.note{font-size:13px;color:var(--text-light);margin-top:6px}
+
+.btn {
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 14px;border-radius:10px;border:0;background:var(--primary-color);color:var(--white);cursor:pointer;font-weight:600;
+  box-shadow:var(--shadow);transition:var(--transition)
+}
+.btn.secondary{background:#ffffff;color:var(--text-dark);border:1px solid rgba(44,62,80,0.06)}
+.btn:active{transform:translateY(1px)}
+.toggle-btn{padding:8px 10px;border-radius:8px;border:0;background:rgba(44,62,80,0.04);cursor:pointer}
+
+.error{color:#e73a3a;font-size:13px;margin-top:6px}
+.success{color:var(--secondary-color);font-size:13px;margin-top:6px}
+
+.footer-note{font-size:13px;color:var(--text-light);margin-top:8px}
+
+/* modern focus-visible */
+:focus-visible{outline:3px solid rgba(69,183,209,0.18);outline-offset:3px;border-radius:8px}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" role="main" aria-label="Client sign up">
+      <div class="left">
+        <div class="brand">🌿 <span style="font-weight:800">PrimePhone</span> Store</div>
+        <div class="hero" aria-hidden="true">
+          <h1>Welcome to PrimePhone</h1>
+          <p>Premium skincare made modern. Create your account to save favourites & get exclusive deals.</p>
+          <div class="illustration" aria-hidden="true">
+            <!-- tasteful svg -->
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="42" r="30" fill="rgba(255,255,255,0.18)"/><path d="M40 58c6-6 18-6 24 0" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="small">Already have an account? <a href="login.html" style="color:var(--white);font-weight:700;text-decoration:none">Sign in</a></div>
+        </div>
+      </div>
+
+      <form class="form" id="signupForm" autocomplete="off" novalidate>
+        <h2>Create your account</h2>
+
+        <input id="fullname" class="input" placeholder="Full name" autocomplete="name" required>
+        <input id="username" class="input" placeholder="Username (not 'admin')" autocomplete="off" required>
+        <div id="usernameError" class="error" aria-live="polite" hidden></div>
+
+        <input id="email" class="input" placeholder="Email" type="email" autocomplete="email" required>
+        <input id="phone" class="input" placeholder="Phone (optional)" autocomplete="tel">
+
+        <div class="row">
+          <input id="password" class="input" placeholder="Password (min 8 chars)" type="password" required>
+          <button type="button" id="pwToggle" class="toggle-btn" aria-label="Toggle password visibility">Show</button>
+        </div>
+
+        <input id="confirm" class="input" placeholder="Confirm password" type="password" required>
+        <div id="pwError" class="error" aria-live="polite" hidden></div>
+
+        <label style="display:flex;align-items:center;gap:10px">
+          <input id="captcha" type="checkbox" aria-label="I am not a robot"> <span class="small">I'm not a robot</span>
+        </label>
+        <div id="captchaError" class="error" aria-live="polite" hidden></div>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <button id="signupBtn" class="btn" type="button">Create account</button>
+          <button id="cancelBtn" class="btn secondary" type="button" onclick="location.href='index.html'">Cancel</button>
+        </div>
+
+        <div id="signupMsg" class="footer-note" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+
+<script type="module">
+  // FIREBASE CONFIG: replace placeholders
+  const FIREBASE_CONFIG = {
+    apiKey: "REPLACE_API_KEY",
+    authDomain: "REPLACE_AUTH_DOMAIN",
+    projectId: "REPLACE_PROJECT_ID",
+    storageBucket: "REPLACE_STORAGE_BUCKET",
+    messagingSenderId: "REPLACE_MESSAGING_SENDER_ID",
+    appId: "REPLACE_APP_ID"
+  };
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+  import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+  const app = initializeApp(FIREBASE_CONFIG);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const usernameEl = document.getElementById('username');
+  const fullnameEl = document.getElementById('fullname');
+  const emailEl = document.getElementById('email');
+  const phoneEl = document.getElementById('phone');
+  const passwordEl = document.getElementById('password');
+  const confirmEl = document.getElementById('confirm');
+  const captchaEl = document.getElementById('captcha');
+
+  const pwToggle = document.getElementById('pwToggle');
+  const signupBtn = document.getElementById('signupBtn');
+  const usernameError = document.getElementById('usernameError');
+  const pwError = document.getElementById('pwError');
+  const captchaError = document.getElementById('captchaError');
+  const signupMsg = document.getElementById('signupMsg');
+
+  pwToggle.addEventListener('click', ()=> {
+    passwordEl.type = passwordEl.type === 'password' ? 'text' : 'password';
+    pwToggle.textContent = passwordEl.type === 'password' ? 'Show' : 'Hide';
+    passwordEl.focus();
+  });
+
+  function validateRealtime(){
+    usernameError.hidden = true; pwError.hidden = true; captchaError.hidden = true; signupMsg.textContent = '';
+    const u = usernameEl.value.trim();
+    if (!u) { usernameError.hidden=false; usernameError.textContent='Username required.'; return false; }
+    if (u.toLowerCase() === 'admin') { usernameError.hidden=false; usernameError.textContent='The username \"admin\" is reserved.'; return false; }
+    if (passwordEl.value.length < 8) { pwError.hidden=false; pwError.textContent='Password must be at least 8 characters.'; return false; }
+    if (passwordEl.value !== confirmEl.value) { pwError.hidden=false; pwError.textContent='Passwords do not match.'; return false; }
+    if (!captchaEl.checked) { captchaError.hidden=false; captchaError.textContent='Please confirm you are not a robot.'; return false; }
+    return true;
+  }
+
+  [usernameEl,passwordEl,confirmEl,captchaEl].forEach(el=>el.addEventListener('input', validateRealtime));
+  [captchaEl].forEach(el=>el.addEventListener('change', validateRealtime));
+
+  signupBtn.addEventListener('click', async () => {
+    signupMsg.textContent = ''; usernameError.hidden=true; pwError.hidden=true; captchaError.hidden=true;
+    if (!validateRealtime()) return;
+    signupBtn.disabled = true;
+    try {
+      const fullname = fullnameEl.value.trim();
+      const username = usernameEl.value.trim();
+      const email = emailEl.value.trim();
+      const phone = phoneEl.value.trim();
+      const password = passwordEl.value;
+
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCred.user;
+      await updateProfile(user, { displayName: username });
+      await setDoc(doc(db,'users',user.uid), { fullname, username, email, phone: phone||null, createdAt: new Date().toISOString() });
+
+      signupMsg.textContent = 'Account created successfully.';
+    } catch (err) {
+      signupMsg.textContent = err?.message || 'Signup failed';
+    } finally { signupBtn.disabled = false; }
+  });
+</script>
+</body>
+</html>

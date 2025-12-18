@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Admin Sign In — PrimePhone Admin</title>
+<style>
+:root {
+    --primary-color: #FF6B6B;
+    --secondary-color: #4ECDC4;
+    --accent-color: #45B7D1;
+    --text-dark: #2C3E50;
+    --text-light: #7F8C8D;
+    --bg-light: #F8F9FA;
+    --white: #FFFFFF;
+    --shadow: 0 5px 15px rgba(0,0,0,0.1);
+    --border-radius: 15px;
+    --transition: all 0.3s ease;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;background:linear-gradient(180deg,var(--bg-light),#eef9fb);color:var(--text-dark)}
+.container{min-height:100vh;display:grid;place-items:center;padding:32px}
+.card{width:100%;max-width:520px;background:linear-gradient(180deg,#fff,#fcfeff);border-radius:16px;padding:26px;box-shadow:var(--shadow)}
+.header{display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:800;color:var(--primary-color)}
+.form{display:flex;flex-direction:column;gap:12px}
+.input{padding:12px;border-radius:10px;border:1px solid rgba(44,62,80,0.06);font-size:14px}
+.toggle{padding:8px;border-radius:8px;background:rgba(44,62,80,0.04);border:0;cursor:pointer}
+.btn{padding:10px 14px;border-radius:10px;border:0;background:var(--primary-color);color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+.error{color:#e73a3a;font-size:13px}
+.note{font-size:13px;color:var(--text-light)}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" role="main" aria-label="Admin sign in">
+      <div class="header">
+        <div class="brand">PrimePhone Admin</div>
+        <div class="note">Admin access only</div>
+      </div>
+
+      <form class="form" id="adminForm" autocomplete="off" novalidate>
+        <input id="adminUser" class="input" placeholder="Admin username (no email suggestions)" autocomplete="off" required>
+        <div style="display:flex;gap:8px">
+          <input id="adminPass" class="input" placeholder="Password" type="password" autocomplete="new-password" required style="flex:1">
+          <button type="button" id="toggleAdminPw" class="toggle">Show</button>
+        </div>
+
+        <div id="adminError" class="error" aria-live="polite" hidden></div>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <button id="adminBtn" class="btn" type="button">Sign in as Admin</button>
+          <button class="toggle" type="button" onclick="location.href='login.html'">Back</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+<script type="module">
+  const FIREBASE_CONFIG = {
+    apiKey: "REPLACE_API_KEY",
+    authDomain: "REPLACE_AUTH_DOMAIN",
+    projectId: "REPLACE_PROJECT_ID",
+    storageBucket: "REPLACE_STORAGE_BUCKET",
+    messagingSenderId: "REPLACE_MESSAGING_SENDER_ID",
+    appId: "REPLACE_APP_ID"
+  };
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+  const app = initializeApp(FIREBASE_CONFIG);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const adminUser = document.getElementById('adminUser');
+  const adminPass = document.getElementById('adminPass');
+  const toggleAdminPw = document.getElementById('toggleAdminPw');
+  const adminBtn = document.getElementById('adminBtn');
+  const adminError = document.getElementById('adminError');
+
+  toggleAdminPw.addEventListener('click', ()=> {
+    adminPass.type = adminPass.type === 'password' ? 'text' : 'password';
+    toggleAdminPw.textContent = adminPass.type === 'password' ? 'Show' : 'Hide';
+    adminPass.focus();
+  });
+
+  adminBtn.addEventListener('click', async () => {
+    adminError.hidden=true; adminError.textContent='';
+    try {
+      const uname = adminUser.value.trim().toLowerCase();
+      const pw = adminPass.value;
+      if (!uname || !pw) throw new Error('Enter username and password.');
+      const docRef = doc(db,'admins',uname);
+      const snap = await getDoc(docRef);
+      if (!snap.exists()) throw new Error('Admin account not found.');
+      const data = snap.data();
+      if (!data || !data.email) throw new Error('Admin email not configured.');
+      await signInWithEmailAndPassword(auth, data.email, pw);
+      location.href = 'index.html';
+    } catch (err) {
+      adminError.hidden=false; adminError.textContent = err.message || 'Admin login failed';
+      try { await signOut(auth); } catch(e){}
+    }
+  });
+</script>
+</body>
+</html>

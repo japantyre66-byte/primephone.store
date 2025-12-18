@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Login — PrimePhone Store</title>
+<style>
+:root {
+    --primary-color: #FF6B6B;
+    --secondary-color: #4ECDC4;
+    --accent-color: #45B7D1;
+    --text-dark: #2C3E50;
+    --text-light: #7F8C8D;
+    --bg-light: #F8F9FA;
+    --white: #FFFFFF;
+    --shadow: 0 5px 15px rgba(0,0,0,0.1);
+    --border-radius: 15px;
+    --transition: all 0.3s ease;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;background:linear-gradient(180deg,var(--bg-light),#f0fbff);color:var(--text-dark)}
+.container{min-height:100vh;display:grid;place-items:center;padding:32px}
+.card{width:100%;max-width:520px;background:linear-gradient(180deg,#fff,#fcfeff);border-radius:16px;padding:26px;box-shadow:var(--shadow)}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.brand{font-weight:800;color:var(--primary-color)}
+.form{display:flex;flex-direction:column;gap:12px}
+.input{padding:12px;border-radius:10px;border:1px solid rgba(44,62,80,0.06);font-size:14px}
+.toggle{padding:8px;border-radius:8px;background:rgba(44,62,80,0.04);border:0;cursor:pointer}
+.btn{padding:10px 14px;border-radius:10px;border:0;background:var(--primary-color);color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+.link{color:var(--accent-color);text-decoration:none;font-weight:600}
+.error{color:#e73a3a;font-size:13px}
+.footer-note{font-size:13px;color:var(--text-light);margin-top:8px}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" role="main" aria-label="User login">
+      <div class="header">
+        <div class="brand">🌿 PrimePhone Store</div>
+        <div class="small" style="color:var(--text-light)">Welcome back</div>
+      </div>
+
+      <form class="form" id="loginForm" autocomplete="on" novalidate>
+        <input id="identifier" class="input" placeholder="Username or email" autocomplete="username" required>
+        <div style="display:flex;gap:8px">
+          <input id="password" class="input" type="password" placeholder="Password" autocomplete="current-password" required style="flex:1">
+          <button type="button" id="togglePw" class="toggle" aria-label="Toggle password visibility">Show</button>
+        </div>
+        <a href="#" id="forgot" class="link">Forgot password?</a>
+
+        <div id="loginError" class="error" aria-live="polite" hidden></div>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <button id="loginBtn" class="btn" type="button">Sign in</button>
+          <button class="toggle" type="button" onclick="location.href='signup.html'">Create account</button>
+        </div>
+
+        <div class="footer-note">Login using your username (not case-sensitive) or email.</div>
+      </form>
+    </div>
+  </div>
+
+<script type="module">
+  const FIREBASE_CONFIG = {
+    apiKey: "REPLACE_API_KEY",
+    authDomain: "REPLACE_AUTH_DOMAIN",
+    projectId: "REPLACE_PROJECT_ID",
+    storageBucket: "REPLACE_STORAGE_BUCKET",
+    messagingSenderId: "REPLACE_MESSAGING_SENDER_ID",
+    appId: "REPLACE_APP_ID"
+  };
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+  const app = initializeApp(FIREBASE_CONFIG);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const identifierEl = document.getElementById('identifier');
+  const passwordEl = document.getElementById('password');
+  const togglePw = document.getElementById('togglePw');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const forgot = document.getElementById('forgot');
+
+  togglePw.addEventListener('click', ()=> {
+    passwordEl.type = passwordEl.type === 'password' ? 'text' : 'password';
+    togglePw.textContent = passwordEl.type === 'password' ? 'Show' : 'Hide';
+    passwordEl.focus();
+  });
+
+  async function resolveToEmail(identifier){
+    if (identifier.includes('@')) return identifier;
+    const snap = await getDocs(collection(db,'users'));
+    let found = null;
+    snap.forEach(d => { const data = d.data(); if (data.username && data.username.toLowerCase() === identifier.toLowerCase()) found = data.email; });
+    if (!found) throw new Error('Account not found');
+    return found;
+  }
+
+  loginBtn.addEventListener('click', async () => {
+    loginError.hidden = true; loginError.textContent = '';
+    try {
+      const id = identifierEl.value.trim(); const pw = passwordEl.value;
+      if (!id || !pw) throw new Error('Enter username/email and password.');
+      const email = await resolveToEmail(id);
+      await signInWithEmailAndPassword(auth, email, pw);
+      location.href = 'index.html';
+    } catch (err) { loginError.hidden=false; loginError.textContent = err.message || 'Login failed'; }
+  });
+
+  forgot.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = prompt('Enter your account email to receive reset link:');
+    if (!email) return;
+    try { await sendPasswordResetEmail(auth,email); alert('Reset email sent'); } catch(err){ alert('Reset failed: '+(err.message||'error')); }
+  });
+</script>
+</body>
+</html>

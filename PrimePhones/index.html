@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrimePhone Store - Best Smartphones & Deals</title>
+
+    <!-- Favicon / Tab icon (replace files in assets/) -->
+    <link rel="icon" href="assets/favicon.png" sizes="32x32" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      .site-grid {
+        display: grid;
+        grid-template-columns: 220px 1fr 300px;
+        grid-template-rows: auto 1fr;
+        gap: 0;
+        min-height: 100vh;
+      }
+      .topbar-wrap {
+        grid-column: 1 / -1;
+      }
+      .left-nav {
+        grid-column: 1 / 2;
+        background: #fff;
+        border-right: 1px solid #e9ecef;
+        padding: 1rem;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+      }
+      .left-nav .nav-link {
+        color: #2c3e50;
+        padding: 0.35rem 0;
+        display: block;
+      }
+      .main-column {
+        grid-column: 2 / 3;
+        padding: 0;
+      }
+      .right-ad {
+        grid-column: 3 / 4;
+        padding: 1rem;
+        border-left: 1px solid #e9ecef;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+        background: #fff;
+      }
+      @media (max-width: 991px) {
+        .site-grid {
+          grid-template-columns: 1fr;
+        }
+        .left-nav,
+        .right-ad {
+          display: none;
+        }
+      }
+      .search-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 40px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #f1f3f5;
+        transition: width 0.22s ease, box-shadow 0.22s ease;
+        padding: 4px;
+      }
+      .search-wrapper.open {
+        width: 320px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        background: #fff;
+      }
+      .search-input {
+        border: 0;
+        outline: 0;
+        min-width: 0;
+        width: 100%;
+        padding: 6px 8px;
+        background: transparent;
+      }
+      .search-btn {
+        background: none;
+        border: 0;
+        padding: 6px;
+        cursor: pointer;
+      }
+      .left-nav .nav-link:focus {
+        outline: 3px solid rgba(0, 123, 255, 0.18);
+        border-radius: 6px;
+      }
+      .hero-section .min-vh-100 {
+        min-height: calc(100vh - 80px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-grid">
+      <!-- TOP NAVBAR -->
+      <div class="topbar-wrap">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+          <div class="container">
+            <div
+              class="d-flex align-items-center w-100 justify-content-between"
+            >
+              <div class="d-flex align-items-center gap-2">
+                <button
+                  id="sidebarToggle"
+                  class="btn btn-light d-lg-none me-2"
+                  aria-label="Open navigation"
+                >
+                  <i class="fa fa-bars"></i>
+                </button>
+                <a
+                  class="navbar-brand fw-bold text-primary d-flex align-items-center"
+                  href="#"
+                  ><i class="fas fa-mobile-alt me-2"></i>PrimePhone Store</a
+                >
+              </div>
+
+              <!-- Search -->
+              <div class="d-flex align-items-center ms-auto me-3">
+                <div
+                  id="searchWrapper"
+                  class="search-wrapper"
+                  role="search"
+                  aria-label="Site search"
+                >
+                  <button
+                    id="searchBtn"
+                    class="search-btn"
+                    aria-label="Open search"
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
+                  <input
+                    id="siteSearch"
+                    class="search-input"
+                    type="search"
+                    placeholder="Search phones, e.g. Galaxy S23"
+                    aria-label="Search"
+                  />
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center">
+                <ul
+                  class="navbar-nav ms-auto d-flex flex-row align-items-center"
+                  style="gap: 12px; list-style: none; margin: 0; padding: 0"
+                >
+                  <li><a class="nav-link" href="#home">Home</a></li>
+                  <li><a class="nav-link" href="#products">Phones</a></li>
+                  <li><a class="nav-link" href="#about">About</a></li>
+                  <li><a class="nav-link" href="#contact">Contact</a></li>
+                  <li>
+                    <a
+                      class="nav-link position-relative"
+                      href="#"
+                      data-bs-toggle="modal"
+                      data-bs-target="#cartModal"
+                      aria-label="Open cart"
+                    >
+                      <i class="fas fa-shopping-cart"></i>
+                      <span class="badge bg-danger cart-count">0</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- LEFT NAV -->
+      <aside class="left-nav" aria-label="Left side navigation">
+        <nav>
+          <a class="nav-link" href="#home"
+            ><i class="fa fa-home me-2"></i>Home</a
+          >
+          <a class="nav-link" href="#products"
+            ><i class="fa fa-mobile-alt me-2"></i>Phones</a
+          >
+          <a class="nav-link" href="#mostVisited"
+            ><i class="fa fa-chart-line me-2"></i>Most Visited</a
+          >
+          <a class="nav-link" href="#brands"
+            ><i class="fa fa-tags me-2"></i>Brands</a
+          >
+          <a class="nav-link" href="#contact"
+            ><i class="fa fa-envelope me-2"></i>Contact</a
+          >
+          <hr />
+          <div class="mt-2">
+            <button
+              class="btn btn-sm btn-outline-primary w-100 mb-2"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+            >
+              Login
+            </button>
+            <button
+              class="btn btn-sm btn-primary w-100"
+              data-bs-toggle="modal"
+              data-bs-target="#signupModal"
+            >
+              Sign Up
+            </button>
+          </div>
+        </nav>
+      </aside>
+<div class="scroll-buttons">
+  <button id="scrollUp" class="scroll-btn">▲</button>
+  <button id="scrollDown" class="scroll-btn">▼</button>
+</div>
+
+      <!-- MAIN -->
+      <main class="main-column">
+        <!-- Hero -->
+        <section id="home" class="hero-section">
+          <div class="container">
+            <div class="row align-items-center min-vh-100">
+              <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                  Latest Smartphones
+                  <span class="text-primary">Up to 40% OFF</span>
+                </h1>
+                <p class="lead mb-4">
+                  Top brands — unbeatable prices. Explore flagship phones,
+                  budget champs, and accessories.
+                </p>
+                <div class="d-flex gap-3">
+                  <button class="btn btn-primary btn-lg px-4">
+                    Shop Phones
+                  </button>
+                  <button
+                    class="btn btn-outline-primary btn-lg px-4"
+                    onclick="document.querySelector('#products').scrollIntoView({behavior:'smooth'})"
+                  >
+                    View Collection
+                  </button>
+                </div>
+              </div>
+              <div class="col-lg-6 text-center">
+                <div class="hero-image">
+                  <i
+                    class="fas fa-mobile-alt fa-10x text-primary opacity-25"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Features -->
+        <section class="py-5 bg-light">
+          <div class="container">
+            <div class="row text-center">
+              <div class="col-md-3 mb-4">
+                <div class="feature-card">
+                  <i class="fas fa-truck-fast fa-3x text-primary mb-3"></i>
+                  <h5>Free Delivery</h5>
+                  <p>On orders above RS: 4999</p>
+                </div>
+              </div>
+              <div class="col-md-3 mb-4">
+                <div class="feature-card">
+                  <i class="fas fa-headset fa-3x text-primary mb-3"></i>
+                  <h5>Support</h5>
+                  <p>Warranty & setup help</p>
+                </div>
+              </div>
+              <div class="col-md-3 mb-4">
+                <div class="feature-card">
+                  <i class="fas fa-sync-alt fa-3x text-primary mb-3"></i>
+                  <h5>7 Days Return</h5>
+                  <p>Easy returns & replacements</p>
+                </div>
+              </div>
+              <div class="col-md-3 mb-4">
+                <div class="feature-card">
+                  <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                  <h5>Secure Payment</h5>
+                  <p>Multiple trusted gateways</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Products -->
+        <section id="products" class="py-5">
+          <div class="container">
+            <div class="text-center mb-5">
+              <h2 class="display-5 fw-bold">Featured Phones</h2>
+              <p class="lead">
+                Handpicked smartphones — flagship performance to budget-friendly
+                picks.
+              </p>
+            </div>
+
+            <div class="row" id="products-container">
+              <!-- Products injected by JS; example cards below for fallback -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Most visited -->
+        <section id="mostVisited" class="py-4 bg-white">
+          <div class="container">
+            <h3 class="h5 mb-3">Most Visited</h3>
+            <div id="mostVisitedContainer" class="row g-3">
+              <div class="col-12 text-muted">
+                No visits yet — view a phone to record visits.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Brands -->
+        <section id="brands" class="py-4 bg-light">
+          <div class="container">
+            <h3 class="h5 mb-3">Top Brands</h3>
+            <div class="d-flex gap-3 flex-wrap">
+              <div class="brand-card p-3 border rounded">Samsung</div>
+              <div class="brand-card p-3 border rounded">Apple</div>
+              <div class="brand-card p-3 border rounded">Xiaomi</div>
+              <div class="brand-card p-3 border rounded">OnePlus</div>
+              <div class="brand-card p-3 border rounded">OPPO</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="py-5 bg-light">
+          <div class="container">
+            <div class="text-center mb-5">
+              <h2 class="display-5 fw-bold">Customers Love Our Phones ❤️</h2>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-8 mx-auto">
+                <div class="testimonial-card">
+                  <div class="text-center">
+                    <div class="mb-3">
+                      <i class="fas fa-quote-left fa-2x text-primary"></i>
+                    </div>
+                    <p class="fs-5 mb-4">
+                      "Bought a Nova Slim 12 — amazing battery and camera. Fast
+                      delivery too!"
+                    </p>
+                    <div class="rating mb-3">
+                      <i class="fas fa-star text-warning"></i
+                      ><i class="fas fa-star text-warning"></i
+                      ><i class="fas fa-star text-warning"></i
+                      ><i class="fas fa-star text-warning"></i
+                      ><i class="fas fa-star text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold">Ayesha - Happy Customer</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- About -->
+        <section id="about" class="py-5">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-6">
+                <h2 class="display-5 fw-bold mb-4">About PrimePhone Store</h2>
+                <p class="lead mb-4">
+                  We source authentic smartphones with warranties and provide
+                  local support across Pakistan.
+                </p>
+                <div class="row">
+                  <div class="col-6 mb-3">
+                    <div class="about-stat">
+                      <h3 class="text-primary fw-bold">5000+</h3>
+                      <p>Happy Customers</p>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-3">
+                    <div class="about-stat">
+                      <h3 class="text-primary fw-bold">120+</h3>
+                      <p>Phone Models</p>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="about-stat">
+                      <h3 class="text-primary fw-bold">24/7</h3>
+                      <p>Support</p>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="about-stat">
+                      <h3 class="text-primary fw-bold">7 Days</h3>
+                      <p>Return Policy</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 text-center">
+                <div class="about-image">
+                  <i
+                    class="fas fa-mobile-alt fa-10x text-primary opacity-25"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="py-5 bg-light">
+          <div class="container">
+            <div class="text-center mb-5">
+              <h2 class="display-5 fw-bold">Contact Us</h2>
+              <p class="lead">
+                Questions about phones, warranties or shipping? Get in touch.
+              </p>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-8 mx-auto">
+                <form id="contactForm">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Your Name"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <input
+                        type="email"
+                        class="form-control"
+                        placeholder="Your Email"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Subject"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <textarea
+                      class="form-control"
+                      rows="5"
+                      placeholder="Your Message"
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                      Send Message
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3380.8370270071314!2d72.67776427433125!3d32.07365641960062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x392177bfd683f3d5%3A0xa8090086de867b9d!2sUniversity%20of%20Sargodha!5e0!3m2!1sen!2s!4v1763117549809!5m2!1sen!2s"
+          width="100%"
+          height="350"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white py-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-4 mb-4">
+                <h5 class="fw-bold mb-3">
+                  <i class="fas fa-mobile-alt me-2"></i>PrimePhone Store
+                </h5>
+                <p>Authentic smartphones, great prices, local support.</p>
+                <div class="social-links">
+                  <a href="#" class="text-white me-3" aria-label="Facebook"
+                    ><i class="fab fa-facebook fa-2x"></i
+                  ></a>
+                  <a href="#" class="text-white me-3" aria-label="Instagram"
+                    ><i class="fab fa-instagram fa-2x"></i
+                  ></a>
+                  <a href="#" class="text-white me-3" aria-label="WhatsApp"
+                    ><i class="fab fa-whatsapp fa-2x"></i
+                  ></a>
+                </div>
+              </div>
+              <div class="col-lg-2 mb-4">
+                <h5 class="fw-bold mb-3">Quick Links</h5>
+                <ul class="list-unstyled">
+                  <li><a href="#home" class="text-white-50">Home</a></li>
+                  <li><a href="#products" class="text-white-50">Phones</a></li>
+                  <li><a href="#about" class="text-white-50">About</a></li>
+                  <li><a href="#contact" class="text-white-50">Contact</a></li>
+                </ul>
+              </div>
+              <div class="col-lg-3 mb-4">
+                <h5 class="fw-bold mb-3">Customer Service</h5>
+                <ul class="list-unstyled">
+                  <li><a href="#" class="text-white-50">Shipping Policy</a></li>
+                  <li><a href="#" class="text-white-50">Return Policy</a></li>
+                  <li><a href="#" class="text-white-50">Warranty</a></li>
+                  <li>
+                    <a href="#" class="text-white-50">Terms & Conditions</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-3 mb-4">
+                <h5 class="fw-bold mb-3">Contact Info</h5>
+                <p><i class="fas fa-phone me-2"></i>+92 300 1234567</p>
+                <p>
+                  <i class="fas fa-envelope me-2"></i
+                  >support@PrimePhonemobiles.pk
+                </p>
+                <p><i class="fas fa-map-marker-alt me-2"></i>Pakistan</p>
+              </div>
+            </div>
+            <hr class="my-4" />
+            <div class="text-center">
+              <p>&copy; 2024 PrimePhone Store. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      </main>
+
+      <!-- RIGHT AD -->
+      <aside class="right-ad" aria-label="Advertisement">
+        <div class="p-3">
+          <h6 class="fw-bold">Advertisement</h6>
+          <div class="card p-3">
+            <img
+              src="assets/ad-placeholder.png"
+              alt="Ad"
+              style="width: 100%; height: auto; border-radius: 8px"
+            />
+            <p class="small text-muted mt-2">
+              Promote your accessories or trade-in offers here
+            </p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body" id="cartItems"><p>Your cart is empty</p></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Continue Shopping
+            </button>
+            <button type="button" class="btn btn-primary">Checkout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Minimal JS for search expand + sidebar toggle (unchanged behavior) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      (function () {
+        const searchWrapper = document.getElementById("searchWrapper");
+        const searchBtn = document.getElementById("searchBtn");
+        const siteSearch = document.getElementById("siteSearch");
+
+        searchBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          searchWrapper.classList.add("open");
+          siteSearch.focus();
+        });
+        siteSearch.addEventListener("focus", () =>
+          searchWrapper.classList.add("open")
+        );
+        siteSearch.addEventListener("blur", () => {
+          if (!siteSearch.value) searchWrapper.classList.remove("open");
+        });
+
+        const sidebar = document.querySelector(".left-nav");
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        let sidebarOpen = false;
+        if (sidebarToggle && sidebar) {
+          sidebarToggle.addEventListener("click", () => {
+            if (window.innerWidth > 991) return;
+            sidebarOpen = !sidebarOpen;
+            if (sidebarOpen) {
+              sidebar.style.display = "block";
+              sidebar.style.position = "fixed";
+              sidebar.style.left = "0";
+              sidebar.style.top = "0";
+              sidebar.style.zIndex = "1050";
+              sidebar.style.height = "100%";
+              sidebar.style.boxShadow = "2px 0 12px rgba(0,0,0,0.08)";
+            } else {
+              sidebar.style.display = "none";
+              sidebar.style.position = "";
+              sidebar.style.left = "";
+              sidebar.style.top = "";
+              sidebar.style.zIndex = "";
+              sidebar.style.height = "";
+              sidebar.style.boxShadow = "";
+            }
+          });
+          document.addEventListener("click", (e) => {
+            if (!sidebarOpen) return;
+            if (
+              !sidebar.contains(e.target) &&
+              !sidebarToggle.contains(e.target)
+            )
+              sidebarToggle.click();
+          });
+        }
+      })();
+    </script>
+
+    <script src="script.js"></script>
+  </body>
+</html>
